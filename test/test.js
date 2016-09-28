@@ -1,14 +1,14 @@
 "use strict";
 
 const React = require("react");
-const GroupedBarChartHorizontal = require("..");
+const GroupedBarChartVertical = require("..");
 const ReactTestUtils = require("react-addons-test-utils");
 const assert = require("assert");
 
-describe("<GroupedBarChartHorizontal/>", function() {
+describe("<GroupedBarChartVertical/>", function() {
     it("shouldnt render", function() {
         const renderer = ReactTestUtils.createRenderer();
-        const result = renderer.getRenderOutput(React.createElement(GroupedBarChartHorizontal));
+        const result = renderer.getRenderOutput(React.createElement(GroupedBarChartVertical));
 
         assert.strictEqual(result, null);
     });

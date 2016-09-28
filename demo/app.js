@@ -1,6 +1,6 @@
 "use strict";
 
-const GroupedBarChartHorizontal = require("@yavuzmester/grouped-bar-chart-horizontal");
+const GroupedBarChartVertical = require("@yavuzmester/grouped-bar-chart-vertical");
 const React = require("react");
 const ReactDOM = require("react-dom");
 
@@ -46,6 +46,6 @@ const props = {
 };
 
 setTimeout(() => {
-    const gbc = ReactDOM.render(React.createElement(GroupedBarChartHorizontal, props), document.getElementById("root"));
+    const gbc = ReactDOM.render(React.createElement(GroupedBarChartVertical, props), document.getElementById("root"));
     gbc.on("title-click", () => console.log("title-click"));
 }, 100);

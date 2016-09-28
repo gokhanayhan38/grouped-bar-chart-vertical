@@ -55,7 +55,7 @@ const defaultProps = {
  *   We are calling selection.on multiple times (at componentDidUpdate)
  *   and it does not cause the callback to be called multiple times (that"s what we want there).
  */
-class GroupedBarChartHorizontal extends Component {
+class GroupedBarChartVertical extends Component {
     constructor(props) {
         super(props);
         this.onBarClicked = this.onBarClicked.bind(this);
@@ -117,7 +117,7 @@ class GroupedBarChartHorizontal extends Component {
         const {colors} = this.props,
             numOfCategories = this.numOfCategories(),
             numOfGroups = this.numOfGroups(),
-            barHeight = toPx(GroupedBarChartHorizontal.barHeightScale(numOfGroups));
+            barHeight = toPx(GroupedBarChartVertical.barHeightScale(numOfGroups));
 
         return numOfCategories * barHeight * numOfGroups;
     }
@@ -301,11 +301,11 @@ class GroupedBarChartHorizontal extends Component {
     onTitleClicked() {
         this.emit("title-click");
     }
-} //end of GroupedBarChartHorizontal component def
+} //end of GroupedBarChartVertical component def
 
-GroupedBarChartHorizontal.propTypes = propTypes;
-GroupedBarChartHorizontal.defaultProps = defaultProps;
+GroupedBarChartVertical.propTypes = propTypes;
+GroupedBarChartVertical.defaultProps = defaultProps;
 
-GroupedBarChartHorizontal.barHeightScale = d3.scaleLinear().domain([1, 11]).range(["2.5ch", "0.5ch"]).clamp(true);
+GroupedBarChartVertical.barHeightScale = d3.scaleLinear().domain([1, 11]).range(["2.5ch", "0.5ch"]).clamp(true);
 
-module.exports = GroupedBarChartHorizontal;
+module.exports = GroupedBarChartVertical;

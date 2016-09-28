@@ -1,11 +1,11 @@
 {
-	"name": "@yavuzmester/grouped-bar-chart-horizontal",
+	"name": "@yavuzmester/grouped-bar-chart-vertical",
 	"version": "2.0.7",
 	"main": "build/index.js",
 	"description": "grouped bar chart powered with react and d3",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/yavuzmester/grouped-bar-chart-horizontal"
+		"url": "https://github.com/gokhanayhan38/grouped-bar-chart-vertical"
 	},
 	"peerDependencies": {
 		"react": "^15.0.2",
@@ -29,6 +29,5 @@
 		"prepublish": "rm -rf build && mkdir build && babel --plugins transform-react-jsx index.jsx --out-file build/index.js",
 		"test": "npm install && mocha"
 	},
-	"author": "Yavuz Mester",
 	"license": "MIT"
 }
