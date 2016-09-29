@@ -225,7 +225,6 @@ class GroupedBarChartVertical extends Component {
             x0Scale = this.x0Scale(),
             x1Scale = this.x1Scale(),
             yScale = this.yScale();
-            //y1Scale = this.y1Scale();
 
         return (
             /* Margin convention in D3: https://gist.github.com/mbostock/3019563 */
