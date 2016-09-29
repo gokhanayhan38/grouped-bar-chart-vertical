@@ -92,7 +92,7 @@ class GroupedBarChartVertical extends Component {
         }
     }
 
-    svgWidth() /*: number */{
+    svgHeight() /*: number */{
         const { divWidth, svgMargin } = this.props;
         return divWidth - svgMargin.left - svgMargin.right;
     }
@@ -106,7 +106,7 @@ class GroupedBarChartVertical extends Component {
         return this.categories().length;
     }
 
-    svgHeight() /*: number */{
+    svgWidth() /*: number */{
         const { colors } = this.props,
               numOfCategories = this.numOfCategories(),
               numOfGroups = this.numOfGroups(),
@@ -139,69 +139,75 @@ class GroupedBarChartVertical extends Component {
         return selection.includes(category) ? "white" : "gray";
     }
 
-    xDomain() /*: array<number> */{
-        const data = this.data(),
-              { showPercentageValue, logScale } = this.props;
-
-        return [!logScale ? 0 : 1, d3.max(data, d => showPercentageValue ? d.percentageValue : d.value)];
-    }
-
-    xRange() /*: array<number> */{
-        const svgWidth = this.svgWidth();
-        return [0, svgWidth];
-    }
-
-    xScale() /*: function */{
-        const { logScale } = this.props,
-              xDomain = this.xDomain(),
-              xRange = this.xRange();
-
-        if (!logScale) {
-            return d3.scaleLinear().domain(xDomain).range(xRange);
-        } else {
-            return d3.scaleLog().domain(xDomain).range(xRange);
-        }
-    }
-
-    xAxis() /*: function */{
-        const { showPercentageValue } = this.props,
-              xScale = this.xScale();
-
-        return !showPercentageValue ? d3.axisBottom(xScale).ticks(3, ",.0s") : d3.axisBottom(xScale).ticks(3).tickFormat(t => t + "%");
-    }
-
-    y0Domain() /*: array<string> */{
+    x0Domain() /*: array<number> */{
+        // x0
         const data = this.data();
         return data.map(d => d.category);
     }
 
-    y0Scale() /*: function */{
-        const y0Domain = this.y0Domain(),
-              yRange = this.yRange();
+    x0Scale() /*: function */{
+        const x0Domain = this.x0Domain(),
+              xRange = this.xRange();
 
-        return d3.scaleBand().domain(y0Domain).rangeRound(yRange).padding(0.05);
+        return d3.scaleBand().domain(x0Domain).rangeRound(xRange).padding(0.05);
     }
 
-    y1Domain() /*: array<string> */{
+    x1Domain() /*: array<number> */{
+        // x0
         const data = this.data();
         return _.uniq(data.map(d => d.color));
     }
 
-    y1Scale() /*: function */{
-        const y1Domain = this.y1Domain(),
-              y0Scale = this.y0Scale();
+    x1Scale() /*: function */{
+        const x1Domain = this.x1Domain(),
+              x0Scale = this.x0Scale();
 
-        return d3.scaleBand().domain(y1Domain).rangeRound([0, y0Scale.bandwidth()]);
+        return d3.scaleBand().domain(x1Domain).rangeRound([0, x0Scale.bandwidth()]);
+    }
+
+    xRange() /*: array<number> */{
+        // x0
+        const svgWidth = this.svgWidth();
+        return [0, svgWidth];
+        //return [svgWidth, 0];
+    }
+
+    xAxis() /*: function */{
+        const x0Scale = this.x0Scale();
+        return d3.axisBottom(x0Scale);
+    }
+
+    yDomain() /*: array<string> */{
+        const data = this.data(),
+              { showPercentageValue, logScale } = this.props;
+
+        //return [d3.max(data, d => showPercentageValue ? d.percentageValue : d.value) , !logScale ? 0 : 1];
+        return [0, d3.max(data, d => showPercentageValue ? d.percentageValue : d.value)];
+    }
+
+    yScale() /*: function */{
+        const { logScale } = this.props,
+              yDomain = this.yDomain(),
+              yRange = this.yRange();
+
+        if (!logScale) {
+            return d3.scaleLinear().domain(yDomain).range(yRange);
+        } else {
+            return d3.scaleLog().domain(yDomain).range(yRange);
+        }
     }
 
     yRange() /*: array<number> */{
         const svgHeight = this.svgHeight();
-        return [0, svgHeight];
+        return [svgHeight, 0];
+        //return [0, svgHeight];
     }
 
     yAxis() /*: function */{
-        const y0Scale = this.y0Scale();
-        return d3.axisLeft(y0Scale);
+        const { showPercentageValue } = this.props,
+              yScale = this.yScale();
+
+        return !showPercentageValue ? d3.axisLeft(yScale).ticks(3, ",.0s") : d3.axisLeft(yScale).ticks(3).tickFormat(t => t + "%");
     }
 
     render() {
@@ -209,9 +215,10 @@ class GroupedBarChartVertical extends Component {
               { title, divWidth, svgMargin, showPercentageValue } = this.props,
               divHeight = this.divHeight(),
               svgHeight = this.svgHeight(),
-              xScale = this.xScale(),
-              y0Scale = this.y0Scale(),
-              y1Scale = this.y1Scale();
+              x0Scale = this.x0Scale(),
+              x1Scale = this.x1Scale(),
+              yScale = this.yScale();
+        //y1Scale = this.y1Scale();
 
         return (
             /* Margin convention in D3: https://gist.github.com/mbostock/3019563 */
@@ -224,19 +231,18 @@ class GroupedBarChartVertical extends Component {
                     React.createElement(
                         "g",
                         { className: "margin axis", transform: "translate(" + svgMargin.left + "," + svgMargin.top + ")" },
-                        React.createElement("g", { className: "x axis", transform: "translate(0," + svgHeight + ")" }),
                         React.createElement(
                             "g",
-                            { className: "y axis", transform: "translate(0,0)" },
+                            { className: "x axis", transform: "translate(0," + svgHeight + ")" },
                             data.map(d => {
                                 return React.createElement(
                                     "rect",
                                     { key: autoIncrement,
                                         className: "bar",
-                                        x: "0",
-                                        y: y0Scale(d.category) + y1Scale(d.color),
-                                        width: xScale(showPercentageValue ? d.percentageValue : d.value),
-                                        height: y1Scale.bandwidth(),
+                                        x: x0Scale(d.category) + x1Scale(d.color),
+                                        y: "0",
+                                        width: x1Scale.bandwidth(),
+                                        height: yScale(showPercentageValue ? d.percentageValue : d.value),
                                         style: { fill: this.barColor(d) },
                                         onClick: e => this.onBarClicked(Object.assign({ category: d.category }, e)) },
                                     React.createElement(
@@ -247,6 +253,7 @@ class GroupedBarChartVertical extends Component {
                                 );
                             })
                         ),
+                        React.createElement("g", { className: "y axis", transform: "translate(0,0)" }),
                         React.createElement(
                             "text",
                             { y: "-5", onClick: this.onTitleClicked },
@@ -289,10 +296,10 @@ class GroupedBarChartVertical extends Component {
         yAxisNode.call(yAxis);
 
         //make the y axis labels clickable
-        yAxisNode.selectAll(".tick").on("click", category => this.onBarClicked(Object.assign({ category: category }, d3.event)));
+        xAxisNode.selectAll(".tick").on("click", category => this.onBarClicked(Object.assign({ category: category }, d3.event)));
 
         //adjust the y axis label colors (Caution: avoid nested selections in d3, as it expects the data to be nested as well)
-        yAxisNode.selectAll(".tick text").data(this.categories()).style("fill", category => this.categoryTitleColor(category)).html(category => this.categoryTitle(category));
+        xAxisNode.selectAll(".tick text").data(this.categories()).style("fill", category => this.categoryTitleColor(category)).html(category => this.categoryTitle(category));
     }
 
     onBarClicked(e /*: object */) {
