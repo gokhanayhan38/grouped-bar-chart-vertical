@@ -30,6 +30,18 @@ const props = {
         "value": 2000,
         "color": "green"
     }],
+    "categoryTitles": [
+        {
+            category: "hazelnut",
+            categoryTitle: "adana"
+        },
+        {
+            category: "peanut",
+            categoryTitle: "ankara"
+        }
+    ],
+    "showPercentageValue": true,
+    "logScale": false,
     "selection": ["hazelnut", "peanut"]
 };
 
