@@ -117,9 +117,10 @@ class GroupedBarChartVertical extends Component {
         const {colors} = this.props,
             numOfCategories = this.numOfCategories(),
             numOfGroups = this.numOfGroups(),
-            barHeight = toPx(GroupedBarChartVertical.barHeightScale(numOfGroups));
+            barWidth = toPx(GroupedBarChartVertical.barWidthScale(numOfGroups));
 
-        return numOfCategories * barHeight * numOfGroups;
+        return numOfCategories * barWidth * numOfGroups;
+        //return numOfCategories * numOfGroups;
     }
 
     divHeight() /*: number */ {
@@ -185,8 +186,8 @@ class GroupedBarChartVertical extends Component {
         const data = this.data(),
             {showPercentageValue, logScale} = this.props;
 
-        //return [d3.max(data, d => showPercentageValue ? d.percentageValue : d.value) , !logScale ? 0 : 1];
-        return [ 0, d3.max(data, d => showPercentageValue ? d.percentageValue : d.value)];
+        return [d3.max(data, d => showPercentageValue ? d.percentageValue : d.value) , !logScale ? 0 : 1];
+        //return [ !logScale ? 0 : 1, d3.max(data, d => showPercentageValue ? d.percentageValue : d.value)];
     }
 
     yScale() /*: function */ {
@@ -194,18 +195,19 @@ class GroupedBarChartVertical extends Component {
             yDomain = this.yDomain(),
             yRange = this.yRange();
 
-        if (!logScale) {
+        //if (!logScale) {
             return d3.scaleLinear().domain(yDomain).range(yRange);
-        }
-        else {
-            return d3.scaleLog().domain(yDomain).range(yRange);
-        }
+            //return d3.scaleLinear().domain(yDomain).rangeRound(yRange);
+        //}
+        //else {
+        //    return d3.scaleLog().domain(yDomain).range(yRange);
+        //}
     }
 
     yRange() /*: array<number> */ {
         const svgHeight = this.svgHeight();
-        return [svgHeight, 0];
-        //return [0, svgHeight];
+        //return [svgHeight, 0];
+        return [0, svgHeight];
     }
 
     yAxis() /*: function */ {
@@ -240,7 +242,7 @@ class GroupedBarChartVertical extends Component {
                                               x={x0Scale(d.category) + x1Scale(d.color)}
                                               y="0"
                                               width={x1Scale.bandwidth()}
-                                              height={yScale(showPercentageValue ? d.percentageValue : d.value)}
+                                              height={yScale(showPercentageValue ? d.percentageValue : d.value )}
                                               style={{fill: this.barColor(d)}}
                                               onClick={e => this.onBarClicked(Object.assign({category: d.category}, e))}>
 
@@ -254,6 +256,7 @@ class GroupedBarChartVertical extends Component {
                         <g className="y axis" transform={"translate(0,0)"}>
 
                         </g>
+
 
                         <text y="-5" onClick={this.onTitleClicked}>
                             <tspan className="category-chart-title">{title}</tspan>
@@ -311,6 +314,6 @@ class GroupedBarChartVertical extends Component {
 GroupedBarChartVertical.propTypes = propTypes;
 GroupedBarChartVertical.defaultProps = defaultProps;
 
-GroupedBarChartVertical.barHeightScale = d3.scaleLinear().domain([1, 11]).range(["2.5ch", "0.5ch"]).clamp(true);
+GroupedBarChartVertical.barWidthScale = d3.scaleLinear().domain([1, 11]).range(["2.5ch", "0.5ch"]).clamp(true);
 
 module.exports = GroupedBarChartVertical;
