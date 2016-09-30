@@ -6,7 +6,7 @@ const ReactDOM = require("react-dom");
 
 const props = {
     "title": "kilo",
-    "divWidth": 360,
+    "divHeight": 300,
     "svgMargin": {
         "left": 110,
         "right": 50,
@@ -30,18 +30,6 @@ const props = {
         "value": 2000,
         "color": "green"
     }],
-    "categoryTitles": [
-        {
-            category: "hazelnut",
-            categoryTitle: "adana"
-        },
-        {
-            category: "peanut",
-            categoryTitle: "ankara"
-        }
-    ],
-    "showPercentageValue": true,
-    "logScale": false,
     "selection": ["hazelnut", "peanut"]
 };
 
