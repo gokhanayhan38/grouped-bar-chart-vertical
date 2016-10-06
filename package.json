@@ -1,6 +1,6 @@
 {
 	"name": "@yavuzmester/grouped-bar-chart-vertical",
-	"version": "2.0.7",
+	"version": "2.0.8",
 	"main": "build/index.js",
 	"description": "grouped bar chart powered with react and d3",
 	"repository": {
@@ -29,5 +29,6 @@
 		"prepublish": "rm -rf build && mkdir build && babel --plugins transform-react-jsx index.jsx --out-file build/index.js",
 		"test": "npm install && mocha"
 	},
-	"license": "MIT"
+	"contributors": ["Gokhan Ayhan", "Yavuz Mester"],
+	"license": "Apache-2.0"
 }
