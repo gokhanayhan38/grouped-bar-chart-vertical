@@ -1,23 +1,27 @@
 {
 	"name": "@yavuzmester/grouped-bar-chart-vertical",
-	"version": "2.0.8",
+	"version": "2.0.9",
 	"main": "build/index.js",
 	"description": "grouped bar chart powered with react and d3",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/gokhanayhan38/grouped-bar-chart-vertical"
 	},
-	"peerDependencies": {
-		"react": "^15.0.2",
-		"react-dom": "^15.0.2",
-		"d3": "^4.2.2"
-	},
 	"dependencies": {
-		"event-emitter-mixin": "^0.3.5",
-		"@yavuzmester/css-length-to-px": "^1.0.4",
 		"classnames": "^2.2.3",
 		"autoincrement": "^1.0.0",
-		"underscore": "^1.8.3"
+		"d3": "^4.2.2",
+		"event-emitter-mixin": "^0.3.5",
+		"react": "^15.0.2",
+		"react-dom": "^15.0.2",
+		"underscore": "^1.8.3",
+		"@yavuzmester/css-length-to-px": "^1.0.4"
+	},
+	"browserify-shim": {
+		"d3": "global:d3"
+	},
+	"browserify": {
+		"transform": ["browserify-shim"]
 	},
 	"devDependencies": {
 		"babel-cli": "^6.14.0",
@@ -26,7 +30,8 @@
 		"mocha": "^3.0.1"
 	},
 	"scripts": {
-		"prepublish": "rm -rf build && mkdir build && babel --plugins transform-react-jsx index.jsx --out-file build/index.js",
+		"prepublish-only": "rm -rf build && mkdir build && babel --plugins transform-react-jsx index.jsx --out-file build/index.js",
+		"my-publish": "npm run prepublish-only && npm publish --access=public",
 		"test": "npm install && mocha"
 	},
 	"contributors": ["Gokhan Ayhan", "Yavuz Mester"],
