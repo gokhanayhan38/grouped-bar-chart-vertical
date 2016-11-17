@@ -113,7 +113,7 @@ class GroupedBarChartHorizontal extends Component {
               numOfGroups = this.numOfGroups(),
               barWidth = toPx(GroupedBarChartHorizontal.barWidthScale(numOfGroups));
 
-        return numOfCategories * barWidth * numOfGroups;
+        return Math.round(numOfCategories * barWidth * numOfGroups);
     }
 
     divWidth() /*: number */{
